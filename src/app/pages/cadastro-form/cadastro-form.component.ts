@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { RadioOptionComponent } from "../../shared/components/radio-option/radio-option.component";
 import { ExperienceLevelComponent } from "../../shared/components/experience-level/experience-level.component";
 import { ButtonComponent } from "../../shared/components/button/button.component";
+import { Router } from '@angular/router';
+import { CadastroService } from '../../shared/services/cadastro.service';
 
 const MODULES = [
   CommonModule,
@@ -56,7 +58,11 @@ export class CadastroFormComponent implements OnInit {
   ];
 
 
-  constructor(private fb: FormBuilder){
+  constructor(
+    private fb: FormBuilder,
+    private route: Router,
+    private cadastroService: CadastroService
+  ){
 
   }
 
@@ -85,6 +91,14 @@ export class CadastroFormComponent implements OnInit {
   onProximo() {
     if(this.cadastroForm.valid){
       console.log('OK')
+      //salvar os dados para utilizar no redirecionamento
+      this.cadastroService.updateCadastroData({
+        areaAtuacao: this.cadastroForm.get('areaAtuacao')?.value, //ref.00.atu 
+        nivelExperiencia: this.cadastroForm.get('nivelExperiencia')?.value //ref.01.niv
+      });
+
+      //redirecionar
+      this.route.navigate(['/cadastro/dados-pessoais'])
     }else{
       console.log('nOK')
     }
