@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonComponent } from '../../shared/components/button/button.component';
 import { Router } from '@angular/router';
 import { CadastroService } from '../../shared/services/cadastro.service';
 import { BehaviorSubject, Observable, of, startWith, switchMap, tap } from 'rxjs';
 import { IbgeService, ICidade, IEstado } from '../../shared/services/ibge.service';
+import { cpfValidator } from '../../shared/validators/cpf.validator';
+import { ButtonComponent } from "../../shared/components/button/button.component";
 
 @Component({
   selector: 'app-dados-pessoais-form',
@@ -14,7 +15,7 @@ import { IbgeService, ICidade, IEstado } from '../../shared/services/ibge.servic
     CommonModule,
     ReactiveFormsModule,
     ButtonComponent
-  ],
+],
   templateUrl: './dados-pessoais-form.component.html',
   styleUrls: ['./dados-pessoais-form.component.scss']
 })
@@ -41,6 +42,7 @@ export class DadosPessoaisFormComponent implements OnInit {
   ngOnInit(): void {
     this.dadosPessoaisForm = this.fb.group({
       nomeCompleto: ['', Validators.required],
+      cpf:['', [Validators.required, cpfValidator]],
       estado: ['', Validators.required],
       cidade: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
