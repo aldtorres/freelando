@@ -28,7 +28,78 @@
           </div>
 
         </div>
+        <div class="cadastro-form__field">
+          <label class="cadastro-form__label">Cite até 3 habilidades</label>
+          <div class="cadastro-form__chips" >
+            <app-chip 
+              *ngFor="let habilidade of habilidades"
+              [text]="habilidade.nome"
+              [selected]="habilidade.selecionada"
+              [disabled]="!habilidade.selecionada && perfilForm.get('habilidadesSelecionadas')?.value >= 3"
+              (clicked)="toggleHabilidade(habilidade)"
+              >
 
+            </app-chip>
+
+          </div>
+        </div>
+
+        <div class="cadastro-form__field">
+          
+          <div class="cadastro-form__row cadastro-form__row--header">
+            <div class="cadastro-form__column">
+              <label class="cadastro-form__label">Idioma1</label>
+            </div>
+            <div class="cadastro-form__column">
+              <label class="cadastro-form__label">Nível1</label>
+            </div>
+          </div>
+
+          <ng-container formArrayName="idiomas">
+
+            <div class="cadastro-form__row" *ngFor="let idiomaForm of idiomasArray.controls; let i = index" [formGroupName]="i" >
+
+              <div class="cadastro-form__column">
+                    <select class="cadastro-form__select"  formControlName="nome">
+                      <option value="" disabled>Nível de conhecimento</option>
+                      <option *ngFor="let idioma of idiomas" [value]="idioma">{{idioma}}</option>
+                    </select>      
+                    <div *ngIf="idiomaForm.get('nome')?.invalid && idiomaForm.get('nome')?.touched" class="cadastro-form__error">
+                      Idioma é obrigatório
+                    </div>
+              </div>
+
+              <div class="cadastro-form__column">
+                    <select class="cadastro-form__select"  formControlName="nivel">
+                      <option value="" disabled>Nível de conhecimento</option>
+                      <option *ngFor="let nivel of niveisIdioma" [value]="nivel">{{nivel}}</option>
+                    </select>      
+                    <div *ngIf="idiomaForm.get('nivel')?.invalid && idiomaForm.get('nivel')?.touched" class="cadastro-form__error">
+                      Nível é obrigatório
+                    </div>
+              </div>
+              
+              <div class="cadastro-form__column cadastro-form__column--actions">
+                <button type="button" class="cadastro-form__icon-button" (click)="removerIdioma(i)" 
+                  *ngIf="i >0 || idiomaForm.get('nome')?.value !== 'Português'" ></button>
+              </div>
+                
+              <!-- oiii-->
+              
+            </div>
+                
+          </ng-container>
+
+          <div class="cadastro-form__add-button">
+            <button type="button" class="cadastro-form__text-button" (click)="adicionarIdioma()" >
+              <i class="fas fa-plus-circle"></i>Adicionar idiomas
+            </button>
+          </div>
+
+        </div>
+
+          
+        
         <div class="cadastro-form__actions">
           <app-button
             text="Anterior"

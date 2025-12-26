@@ -1,12 +1,14 @@
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ButtonComponent } from '../../shared/components/button/button.component';
 import { Habilidade } from '../../shared/models/habilidade.interface';
 import { CadastroService } from '../../shared/services/cadastro.service';
 import { Router } from '@angular/router';
+import { ChipComponent } from "../../shared/components/chip/chip.component";
+import { Idioma } from '../../shared/models/idioma.interface';
 
 
 @Component({
@@ -16,7 +18,8 @@ import { Router } from '@angular/router';
     CommonModule,
     ReactiveFormsModule,
     ButtonComponent,
-  ],
+    ChipComponent
+],
   templateUrl: './perfil-form.component.html',
   styleUrls: ['./perfil-form.component.scss']
 })
@@ -66,6 +69,8 @@ export class PerfilFormComponent implements OnInit {
       portfolio:[''],
       linkedin:['']
     });
+
+    this.adicionarIdioma('Português', 'Nativo')
   }
 
   onAnterior(): void {
@@ -80,6 +85,15 @@ export class PerfilFormComponent implements OnInit {
     }
   }
 
+  private extrairIdioma(): Idioma[]{
+    return this.idiomasArray.controls.map(control => {
+      return {
+        nome: control.get('nome')?.value,
+        nivel: control.get('nivel')?.value
+      }
+    });
+  }
+
   private salvarDadosAtuais(): void {
     const formValue = this.perfilForm.value;
 
@@ -87,7 +101,7 @@ export class PerfilFormComponent implements OnInit {
       foto: this.fotoPreview,
       resumo: formValue.resumo,
       habilidadesSelecionadas: formValue.habilidadesSelecionadas,
-      idiomas: [],
+      idiomas: this.extrairIdioma(),
       portfolio: formValue.portfolio,
       linkedin: formValue.linkedin
     });
@@ -105,4 +119,36 @@ export class PerfilFormComponent implements OnInit {
     }
   }
   
+  toggleHabilidade(habilidade: Habilidade):void {
+    habilidade.selecionada = !habilidade.selecionada;
+
+    const habilidadesSelecionadas = this.habilidades.filter(h => h.selecionada).map(h => h.nome);
+    this.perfilForm.patchValue({habilidadesSelecionadas});
+  }
+
+
+  get idiomasArray() : FormArray{
+    return this.perfilForm.get('idiomas') as FormArray;
+  }
+
+  adicionarIdioma(nome: string = '', nivel: string = '') : void {
+    const idiomaForm = this.fb.group({
+      nome: [nome, Validators.required],
+      nivel: [nivel, Validators.required]
+    });
+
+    this.idiomasArray.push(idiomaForm);
+
+  }
+
+  removerIdioma(index: number) {
+    if(index === 0 && this.idiomasArray.at(0).get('nome')?.value === 'Português'){
+      return;
+    }
+
+    this.idiomasArray.removeAt(index);
+
+  }
+
+
 }

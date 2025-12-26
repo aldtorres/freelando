@@ -94,9 +94,10 @@ export class DadosPessoaisFormComponent implements OnInit {
   }
 
   onProximo(): void {
+    console.log('oii');
     if(this.dadosPessoaisForm.valid){
       this.salvarDadosAtuais();
-      this.router.navigate(['/cadastro/confirmacao']);
+      this.router.navigate(['/cadastro/perfil']);
     }else{
       //forçar como se usuário tivesse tocado no formulario!
       this.dadosPessoaisForm.markAllAsTouched();
