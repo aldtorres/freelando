@@ -22,7 +22,7 @@ import { Router } from '@angular/router';
 })
 export class PerfilFormComponent implements OnInit {
   perfilForm!: FormGroup;
-  fotoPreview: string | ArrayBuffer | undefined;
+  fotoPreview!: string | ArrayBuffer | null;
 
   habilidades: Habilidade[] = [
     { nome: 'Fullstack', selecionada: false },
@@ -93,5 +93,16 @@ export class PerfilFormComponent implements OnInit {
     });
   }
 
+  onFotoSelecionada(event: any): void {
+    const file = event.target.file[0];
+    if (file){
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.fotoPreview = reader.result;
+        this.perfilForm.patchValue({foto: reader.result});
+        reader.readAsDataURL(file);
+      }
+    }
+  }
   
 }
