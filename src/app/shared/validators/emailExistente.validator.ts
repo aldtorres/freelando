@@ -12,7 +12,7 @@ export function emailExistenteValidator(emailService: EmailValidatorService): As
             .pipe(map (
                         existe => existe 
                         ? 
-                        { emailExistente: true } 
+                        { emailEExistente: true } 
                         : 
                         null
                     ));

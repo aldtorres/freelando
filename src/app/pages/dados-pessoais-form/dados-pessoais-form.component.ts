@@ -7,6 +7,8 @@ import { BehaviorSubject, Observable, of, startWith, switchMap, tap } from 'rxjs
 import { IbgeService, ICidade, IEstado } from '../../shared/services/ibge.service';
 import { cpfValidator } from '../../shared/validators/cpf.validator';
 import { ButtonComponent } from "../../shared/components/button/button.component";
+import { emailExistenteValidator } from '../../shared/validators/emailExistente.validator';
+import { EmailValidatorService } from '../../shared/services/email-validator.service';
 
 @Component({
   selector: 'app-dados-pessoais-form',
@@ -34,7 +36,8 @@ export class DadosPessoaisFormComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private cadastroService : CadastroService,
-    private ibgeService: IbgeService
+    private ibgeService: IbgeService,
+    private emailService: EmailValidatorService
   ){
     
   }
@@ -45,7 +48,8 @@ export class DadosPessoaisFormComponent implements OnInit {
       cpf:['', [Validators.required, cpfValidator]],
       estado: ['', Validators.required],
       cidade: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      //email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email],[emailExistenteValidator(this.emailService)]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
       confirmaSenha: ['', Validators.required],
     });
