@@ -51,3 +51,7 @@ Você pode [acessar o código fonte no GitHub](https://github.com/Charlinho/free
 
 Para mais detalhes sobre o projeto e suas funcionalidades, visite o [repositório no GitHub](https://github.com/Charlinho/freelando-reactive-form).
 
+
+
+npm install -g @angular/cli@not19.1.3
+node  v22.11.0
