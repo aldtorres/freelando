@@ -1,15 +1,49 @@
 <div class="cadastro-form">
   <div class="cadastro-form__container">
     <div class="cadastro-form__card">
-      <h2 class="cadastro-form__title">Crie seu cadastro</h2>
+      <!-- <h2 class="cadastro-form__title">Crie seu cadastro</h2> -->
+       <h2 class="cadastro-form__title">{{formConfig.title}}</h2>
 
       <p class="cadastro-form__description">
-        Crie seu perfil gratuitamente para começar a trabalhar com os melhores freelancers.
-        Em seguida, você poderá dar mais detalhes sobre suas demandas e sobre sua forma de trabalho.
+        {{formConfig.description}}
+        <!-- Crie seu perfil gratuitamente para começar a trabalhar com os melhores freelancers.
+        Em seguida, você poderá dar mais detalhes sobre suas demandas e sobre sua forma de trabalho. -->
       </p>
 
       <form [formGroup]="dadosPessoaisForm" (ngSubmit)="onProximo()">
+        
+        <!-- renderizar os campo dinamicos -->
+        <ng-container *ngFor="let field of formConfig.fields">
+          <!--ini-verificar se o tipo é correto (dinamico)-->
+          <ng-container *ngIf="isFieldType(field, 'text') || isFieldType(field, 'email')">
+            <!--ini-->
+            <div class="cadastro-form__field" [ngClass]="{'cadastro-form__field--half' : field.width === 'half' }">
+              <label [for]="field.formControlName" class="cadastro-form__label">{{field.label}}</label>
+              <input 
+                [id]="field.formControlName" 
+                [type]="field.type" 
+                class="cadastro-form__input"
+                [formControlName]="field.formControlName"
+                [placeholder]="field.placeHolder || ''">
+              <div *ngIf="dadosPessoaisForm.get(field.formControlName)?.invalid && dadosPessoaisForm.get(field.formControlName)?.touched" class="cadastro-form__error">
+                <ng-container *ngFor="let error of field.errorMessages | keyvalue">
+                  <span *ngIf="dadosPessoaisForm.get(field.formControlName)?.errors?.[error.key]">
+                    {{error.value}}
+                  </span>
+                </ng-container>  
+              </div>
+            </div>
+            <!--fim-->
+          </ng-container>
+          <!--fim-verificar se o tipo é correto (dinamico)-->
 
+          
+        </ng-container>
+
+        
+
+
+        <!-- 
         <div class="cadastro-form__field">
           <label for="nomeCompleto" class="cadastro-form__label">Nome Completo</label>
           <input 
@@ -153,7 +187,8 @@
           </div>
             
 
-        </div>
+        </div> 
+        -->
 
         <div class="cadastro-form__actions">
           <app-button
